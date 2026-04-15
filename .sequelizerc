@@ -1,7 +1,7 @@
 const {resolve} = require('node:path');
 
-module.export = {
-    config: resolve(__dirname, 'src', 'config', 'database.js'), //caminho para o arquivo de configuração do banco de dados
+module.exports = {
+    config: resolve(__dirname, 'src', 'config', 'database.cjs'), //caminho para o arquivo de configuração do banco de dados
     'migrations-path': resolve(__dirname, 'src', 'database', 'migrations'), //caminho para as migrations
     'models-path': resolve(__dirname, 'src', 'app', 'models'), //caminho para os modelos
 }
