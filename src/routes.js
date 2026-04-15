@@ -1,22 +1,9 @@
-import e, { Router } from 'express';
-import User from './app/models/User.js';
-import { v4 } from 'uuid';
+import { Router } from 'express';
+import UserController from './app/controllers/UserController.js';
 
 const routes = new Router();
 
-routes.get('/', async (req, res) => {
-  const user = {
-    id: v4(),
-    name: 'David',
-    email: 'david@email.com',
-    password_hash: '123456',
-    admin: false,
-  };
-
-  await User.create(user);
-
-  res.status(201).json();
-});
+routes.post('/users', UserController.store); //rota para criar um novo user
 
 
 export default routes;
