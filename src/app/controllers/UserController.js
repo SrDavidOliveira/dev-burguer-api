@@ -12,6 +12,12 @@ class UserController {
   async store(request, response) {
     const { name, email, password_hash, admin } = request.body; //pega os dados enviados no corpo da requisição
 
+    const existingUser = await User.findOne({ where: { email } }); //verifica se já existe um usuário com o mesmo email
+
+    if(existingUser) {
+      return response.status(400).json({ error: 'Este e-mail ja esta cadastrado' }); //se existir, retorna um erro com status 400 (Bad Request)
+    }
+
     const user = await User.create({
       id: v4(),
       name,
