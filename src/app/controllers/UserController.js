@@ -8,6 +8,8 @@ delete - deleta um dado específico
 import User from '../models/User.js';
 import { v4 } from 'uuid';
 import * as Yup from 'yup';
+import bcrypt from 'bcrypt';
+
 
 class UserController {
   async store(request, response) {
@@ -15,7 +17,7 @@ class UserController {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
       email: Yup.string().email().required(),
-      password_hash: Yup.string().min(6).required(),
+      password: Yup.string().min(6).required(),
       admin: Yup.boolean(),
     });
     try {
@@ -24,13 +26,15 @@ class UserController {
       return response.status(400).json({ error: err.errors }); //se a validação falhar, retorna um erro com status 400 (Bad Request) e os erros de validação no corpo da resposta
     }
 
-    const { name, email, password_hash, admin } = request.body; //pega os dados enviados no corpo da requisição
+    const { name, email, password, admin } = request.body; //pega os dados enviados no corpo da requisição
 
     const existingUser = await User.findOne({ where: { email } }); //verifica se já existe um usuário com o mesmo email
 
     if (existingUser) {
       return response.status(400).json({ error: 'Email already taken!' }); //se existir, retorna um erro com status 400 (Bad Request)
     }
+
+    const password_hash = await bcrypt.hash(password, 10); //hash da senha usando bcrypt para garantir a segurança dos dados do usuário
 
     const user = await User.create({
       id: v4(),
