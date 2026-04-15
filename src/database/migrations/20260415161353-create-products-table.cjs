@@ -22,7 +22,7 @@ module.exports = {
         type: Sequelize.STRING, //definir a coluna path como string
         allowNull: false,
       },
-      categgory: {
+      category: {
         type: Sequelize.STRING, //definir a coluna category como string
         allowNull: false,
       },

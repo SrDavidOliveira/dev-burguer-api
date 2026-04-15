@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import Product from './../models/Products.js';
 
 class ProductController {
   async store(request, response) {
@@ -14,9 +15,22 @@ class ProductController {
       return response.status(400).json({ error: err.errors }); //se a validação falhar, retorna um erro com status 400 (Bad Request) e os erros de validação no corpo da resposta
     }
 
-    return response
-      .status(201)
-      .json({ message: 'Produto criado com sucesso!' });
+    const { name, price, category } = request.body; //pega os dados enviados no corpo da requisição
+    const { filename } = request.file; //pega o arquivo enviado na requisição
+
+   const newProduct =  await Product.create({
+        name,
+        price,
+        category,
+        path: filename
+   })
+
+    return response.status(201).json(newProduct);
+  }
+
+  async index(_request, response) {
+    const products = await Product.findAll();
+    return response.status(200).json(products);
   }
 }
 
